@@ -1,15 +1,7 @@
-﻿using System.Configuration;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Manager.Views;
+
 
 namespace Manager
 {
@@ -19,61 +11,121 @@ namespace Manager
     public partial class MainWindow : Window
     {
         private Welcome welcome;
-        List<User> users = new List<User>();
+        private MainMenu mainMenu;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            
-            users.Add(new User() { Id = 1, Name = "John Doe", Birthday = new DateTime(1971, 7, 23) });
-            users.Add(new User() { Id = 2, Name = "Jane Doe", Birthday = new DateTime(1974, 1, 17) });
-            users.Add(new User() { Id = 3, Name = "Sammy Doe", Birthday = new DateTime(1991, 9, 2) });
-
             LoadWelcome();
-       
-        }
-
-        private void Home_Click(object sender, RoutedEventArgs e)
-        {
 
 
-            LoadWelcome();
-           
+
         }
 
         private void LoadWelcome()
         {
-            ContentArea.Content = null;
-
-            // Create a new instance of HomeControl
             welcome = new Welcome();
+            mainMenu = new MainMenu();
 
-            // Set it as the content of the ContentControl in column 1
-            ContentArea.Content = welcome;
+          
+            Grid.SetColumn(mainMenu, 0); 
+            MainGrid.Children.Add(mainMenu);
+        
+            Grid.SetColumn(welcome, 1); 
+            MainGrid.Children.Add(welcome);
+
+            // Subscribe to the toggle event
+            mainMenu.ToggleMenu += MainMenuToggle;
+            mainMenu.CloseProgram += CloseProgram;
         }
 
-        private void Settings(object sender, RoutedEventArgs e)
+        private void MainMenuToggle()
         {
-            // Clear existing content
-            ContentArea.Content = null;
+            
+            ColumnDefinition menuColumn = MainGrid.ColumnDefinitions[0]; 
 
-            // Create and load a new instance of SettingsControl UserControl
-           
+            if (menuColumn.Width.Value == 150) 
+            {
+                
+                menuColumn.Width = new GridLength(30);
+               
+
+                foreach(UIElement el in mainMenu.MainOperations.Children)
+                {
+                   
+                    if(el is Button button)
+                    {
+                        button.Visibility = Visibility.Collapsed;
+                        button.IsEnabled = false;
+                    }
+
+                }
+
+                foreach(UIElement el in mainMenu.BottomOperations.Children)
+                {
+
+                    if(el is Button button)
+                    {
+                        if (!button.Name.Equals("Resize"))
+                        {
+                            button.Visibility = Visibility.Collapsed;
+                            button.IsEnabled = false;
+
+                        }
+                    }
+                    else if (el is Separator s)
+                    {
+                        s.Visibility = Visibility.Collapsed;
+                    }
+                }
+
+                
+            }
+            else
+            {
+              
+                menuColumn.Width = new GridLength(150);
+
+                foreach (UIElement el in mainMenu.MainOperations.Children)
+                {
+
+                    if (el is Button button)
+                    {
+                        button.Visibility = Visibility.Visible;
+                        button.IsEnabled = true;
+                    }
+
+                }
+
+                foreach (UIElement el in mainMenu.BottomOperations.Children)
+                {
+
+                    if (el is Button button)
+                    {
+                        if (!button.Name.Equals("Resize"))
+                        {
+                            button.Visibility = Visibility.Visible;
+                            button.IsEnabled = true;
+
+                        }
+                        
+                    }
+                    else if (el is Separator s)
+                    {
+                        s.Visibility = Visibility.Visible;
+                    }
+                }
+
+            }
         }
 
-        private void About(object sender, RoutedEventArgs e)
+        private void CloseProgram()
         {
 
-            welcome.TextBlockWelcome.Text = "asdasdas";
-
+            this.Close();
         }
-    }
-    public class User
-    {
-        public int Id { get; set; }
 
-        public string Name { get; set; }
-
-        public DateTime Birthday { get; set; }
     }
+
 }
