@@ -23,6 +23,8 @@ namespace Manager.Views
 
         public event Action ToggleMenu;
         public event Action CloseProgram;
+        public event Action WelcomePage;
+        public event Action PasswordPage;
         public MainMenu()
         {
             InitializeComponent();
@@ -38,6 +40,16 @@ namespace Manager.Views
 
            CloseProgram?.Invoke();
           
+        }
+
+        private void MainPageRedirect(object sender, RoutedEventArgs e)
+        {
+            WelcomePage?.Invoke();
+        }
+
+        private void PasswordManagerRedirect(object sender, RoutedEventArgs e)
+        {
+            PasswordPage?.Invoke();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using Manager.Views;
 
@@ -12,32 +14,50 @@ namespace Manager
     {
         private Welcome welcome;
         private MainMenu mainMenu;
-
+        private PasswordPage passwordPage;
+ 
         public MainWindow()
         {
+          
             InitializeComponent();
-
             LoadWelcome();
-
-
 
         }
 
         private void LoadWelcome()
         {
-            welcome = new Welcome();
             mainMenu = new MainMenu();
-
-          
+            welcome = new Welcome();
+ 
             Grid.SetColumn(mainMenu, 0); 
             MainGrid.Children.Add(mainMenu);
         
             Grid.SetColumn(welcome, 1); 
             MainGrid.Children.Add(welcome);
 
-            // Subscribe to the toggle event
+            // Subscribe to the main menu events
             mainMenu.ToggleMenu += MainMenuToggle;
             mainMenu.CloseProgram += CloseProgram;
+            mainMenu.WelcomePage += WelcomePageRedirect;
+            mainMenu.PasswordPage += PasswordPageRedirect;
+        }
+
+        private void WelcomePageRedirect()
+        {
+            MainGrid.Children.Remove(welcome);
+            welcome = new Welcome();
+            Grid.SetColumn(welcome, 1);
+            MainGrid.Children.Add(welcome);
+          
+        }
+
+        private void PasswordPageRedirect()
+        {
+            MainGrid.Children.Remove(passwordPage);
+            passwordPage = new PasswordPage();
+            Grid.SetColumn(passwordPage, 1);
+            MainGrid.Children.Add(passwordPage);
+
         }
 
         private void MainMenuToggle()

@@ -8,8 +8,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="MainMenuGrid" Width="150" Background="Black">
         <StackPanel x:Name="MainOperations" Background="Black" RenderTransformOrigin="0.482,0.505" VerticalAlignment="Top">
-            <Button x:Name="Main" Content="Main" Height="25"/>
-            <Button x:Name="Passwords" Content="Password Manager" Height="25"/>
+            <Button x:Name="Main" Content="Main" Height="25" Click="MainPageRedirect"/>
+            <Button x:Name="Passwords" Content="Password Manager" Height="25" Click="PasswordManagerRedirect"/>
             <Button x:Name="Notes" Content="Notes" Height="25"/>
         </StackPanel>
         <StackPanel x:Name="BottomOperations" Height="66" Margin="0,384,0,0" VerticalAlignment="Bottom">
