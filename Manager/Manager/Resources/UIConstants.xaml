@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!--CONSTANTS FOR EVERY UIELEMENT IN THE APPLICATION  -->
+    <!--CONSTANTS FOR EVERY UI ELEMENT-->
     
     <Thickness x:Key="MenuItemPadding">20,0,20,6</Thickness>
     
