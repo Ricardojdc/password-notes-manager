@@ -10,23 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
 
-namespace Manager.Views
+namespace Manager.Views.PasswordPageWindows
 {
     /// <summary>
-    /// Interaction logic for Welcome.xaml
+    /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Welcome : UserControl
+    public partial class NewEntryWindow : Window
     {
-        public Welcome()
+        public NewEntryWindow()
         {
             InitializeComponent();
         }
-
-        
-    
     }
 }

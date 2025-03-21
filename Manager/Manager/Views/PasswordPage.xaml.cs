@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Manager.Models;
 using Manager.Utils;
+using Manager.Views.PasswordPageWindows;
 
 namespace Manager.Views
 {
@@ -25,10 +26,17 @@ namespace Manager.Views
     public partial class PasswordPage : UserControl
     {
         List<Test> t;
+        Password p;
         public PasswordPage()
         {
             InitializeComponent();
+            LatestFileCleanUp();
             LoadData();
+            
+        }
+        private void LatestFileCleanUp()
+        {
+            PasswordGrid.Columns.Clear();
         }
 
         private void ColumnGeneration()
@@ -48,42 +56,42 @@ namespace Manager.Views
 
             PasswordGrid.Columns.Add(age);
 
-         
+
         }
 
         private void LoadData()
         {
 
-            ColumnGeneration();
-            
-            t = Test.GeneratePeople(150);
-           
-            var namesOnly = t.Select(person => new Test {Name = person.Name , Age = person.Age, City = person.City }).ToList();
-           // var nameColumn = PasswordGrid.Columns.FirstOrDefault(c => c.Header.ToString() == "Name");
-            string nameCol = null;
+            p = new Password();
+            var fileContent = p.ReadFromFile(Utils.Utils.OpenFile());
 
-            foreach(var col in PasswordGrid.Columns)
+            if (fileContent != null)
             {
-
-                if(col.Header == "Name")
-                {
-                    col.IsReadOnly = true;
-                    break;
-                }
+                PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true;
+                PasswordGrid.ItemsSource = fileContent;
 
             }
+            else
+            {
+                //Need to update the status bar
+                //PasswordGrid.Visibility = Visibility.Collapsed;
+
+            }
+           
 
 
+        }
 
+        /// <summary>
+        /// Event in the File menu for a new password entry
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewPasswordEntry(object sender, RoutedEventArgs e)
+        {
+            NewEntryWindow newEntryWindow = new();
 
-
-            //if (nameColumn != null)
-            //{
-            //    nameColumn.IsReadOnly = true;
-            //}
-
-            PasswordGrid.ItemsSource = namesOnly;
-
+            newEntryWindow.ShowDialog();
         }
 
      
