@@ -5,28 +5,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Manager.Models
 {
     internal class Password
     {
-
+        //Class variables
         private string _id;
         private string _login;
         private string _password;
 
+        //Getters and setters. Json property to identify private fields
+        [JsonProperty("_id")]
         public string Id
         {
 
             get { return _id; }
             set { _id = value; }
         }
+
+        [JsonProperty("_login")]
         public string Login
         {
 
             get { return _login; }
             set { _login = value; }
         }
+
+        [JsonProperty("_password")]
         public string Pass
         {
 
@@ -89,7 +97,31 @@ namespace Manager.Models
         }
 
         public List<Password> ReadFromJSON(string path)
-        {
+        {   
+            string jsonString = File.ReadAllText(path);
+            try
+            {
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    
+                    MissingMemberHandling = MissingMemberHandling.Error
+                };
+              
+                List<Password> list = JsonConvert.DeserializeObject<List<Password>>(jsonString, settings);
+
+                if (list != null)
+                {
+                    return list;
+                }
+
+            }           
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Invalid Format");
+            }
+         
+            
 
             return null;
         }

@@ -31,8 +31,7 @@ namespace Manager.Views
         {
             InitializeComponent();
             LatestFileCleanUp();
-            LoadData();
-            
+      
         }
         private void LatestFileCleanUp()
         {
@@ -59,16 +58,17 @@ namespace Manager.Views
 
         }
 
-        private void LoadData()
+        private void LoadData(string fileContent)
         {
 
             p = new Password();
-            var fileContent = p.ReadFromFile(Utils.Utils.OpenFile());
+            //var fileContent = p.ReadFromFile(Utils.Utils.OpenFile());
+            var content = p.ReadFromJSON(fileContent);
 
-            if (fileContent != null)
+            if (content != null)
             {
-                PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true;
-                PasswordGrid.ItemsSource = fileContent;
+                PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
+                PasswordGrid.ItemsSource = content;
 
             }
             else
@@ -94,6 +94,10 @@ namespace Manager.Views
             newEntryWindow.ShowDialog();
         }
 
-     
+        private void OpenFile(object sender, RoutedEventArgs e)
+        {
+            var fileContent = Utils.Utils.OpenFile();
+            LoadData(fileContent);
+        }
     }
 }

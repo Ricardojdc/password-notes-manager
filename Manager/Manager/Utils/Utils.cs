@@ -16,17 +16,18 @@ namespace Manager.Utils
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "All files (*.txt)|*.*"; // Set file types
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json";
             openFileDialog.Multiselect = false; // Allow only one file
 
             if (openFileDialog.ShowDialog() == true)
             {
-               
+
                 return openFileDialog.FileName;
-               
+
             }
             return null;
         }
 
+   
     }
 }

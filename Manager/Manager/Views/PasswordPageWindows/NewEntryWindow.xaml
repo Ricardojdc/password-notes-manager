@@ -6,8 +6,5 @@
         xmlns:local="clr-namespace:Manager.Views.PasswordPageWindows"
         mc:Ignorable="d"
         Title="New Entry" Height="450" Width="800">
-    <Grid Background="#FF716C6C">
-        <Label Content="Label" HorizontalAlignment="Left" Margin="309,197,0,0" VerticalAlignment="Top"/>
-
-    </Grid>
+    <Grid Background="#FF716C6C"/>
 </Window>
