@@ -10,14 +10,18 @@ using Newtonsoft.Json.Linq;
 
 namespace Manager.Models
 {
-    internal class Password
+    public class Password
     {
         //Class variables
         private string _id;
         private string _login;
         private string _password;
+        private string _site;
+        private string _notes;
+
 
         //Getters and setters. Json property to identify private fields
+        [JsonRequired]
         [JsonProperty("_id")]
         public string Id
         {
@@ -25,7 +29,7 @@ namespace Manager.Models
             get { return _id; }
             set { _id = value; }
         }
-
+        [JsonRequired]
         [JsonProperty("_login")]
         public string Login
         {
@@ -33,13 +37,27 @@ namespace Manager.Models
             get { return _login; }
             set { _login = value; }
         }
-
+        [JsonRequired]
         [JsonProperty("_password")]
         public string Pass
         {
 
             get { return _password; }
             set { _password = value; }
+        }
+        [JsonRequired]
+        [JsonProperty("_site")]
+        public string Site
+        {
+            get { return _site; }
+            set { _site = value; }
+        }
+
+        [JsonProperty("_notes")]
+        public string Notes
+        {
+            get { return _notes; }
+            set { _notes = value; }
         }
 
         public List<Password> ReadFromFile(string path)
@@ -67,9 +85,9 @@ namespace Manager.Models
                         {
 
                             string[] recompose = line.Split(" ");
-                            if (recompose.Length == 3)
+                            if (recompose.Length == 5)
                             {
-                                result.Add(new Password { Id = recompose[0], Login = recompose[1], Pass = recompose[2] });
+                                result.Add(new Password { Id = recompose[0], Login = recompose[1], Pass = recompose[2], Site = recompose[3], Notes = recompose[4] });
                             }
                             else
                             {

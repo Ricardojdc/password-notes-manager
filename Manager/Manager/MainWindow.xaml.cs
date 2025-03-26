@@ -32,7 +32,7 @@ namespace Manager
             Grid.SetColumn(mainMenu, 0); 
             MainGrid.Children.Add(mainMenu);
         
-            Grid.SetColumn(welcome, 1); 
+            Grid.SetColumn(welcome, 2); 
             MainGrid.Children.Add(welcome);
 
             // Subscribe to the main menu events
@@ -40,13 +40,14 @@ namespace Manager
             mainMenu.CloseProgram += CloseProgram;
             mainMenu.WelcomePage += WelcomePageRedirect;
             mainMenu.PasswordPage += PasswordPageRedirect;
+            
         }
 
         private void WelcomePageRedirect()
         {
             MainGrid.Children.Remove(welcome);
             welcome = new Welcome();
-            Grid.SetColumn(welcome, 1);
+            Grid.SetColumn(welcome, 2);
             MainGrid.Children.Add(welcome);
           
         }
@@ -55,9 +56,9 @@ namespace Manager
         {
             MainGrid.Children.Remove(passwordPage);
             passwordPage = new PasswordPage();
-            Grid.SetColumn(passwordPage, 1);
+            Grid.SetColumn(passwordPage, 2);
             MainGrid.Children.Add(passwordPage);
-
+            passwordPage.RedirectWelcome += WelcomePageRedirect;
         }
 
         private void MainMenuToggle()

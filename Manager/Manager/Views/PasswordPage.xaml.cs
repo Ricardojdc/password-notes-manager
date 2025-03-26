@@ -25,13 +25,15 @@ namespace Manager.Views
     /// </summary>
     public partial class PasswordPage : UserControl
     {
+        public event Action RedirectWelcome;
         List<Test> t;
         Password p;
         public PasswordPage()
         {
             InitializeComponent();
             LatestFileCleanUp();
-      
+           // EnableEntriesMenu(false);
+          
         }
         private void LatestFileCleanUp()
         {
@@ -58,6 +60,12 @@ namespace Manager.Views
 
         }
 
+        private void ColumnOrder()
+        {
+
+            PasswordGrid.Columns[1].DisplayIndex = 2;
+        }
+
         private void LoadData(string fileContent)
         {
 
@@ -75,10 +83,7 @@ namespace Manager.Views
             {
                 //Need to update the status bar
                 //PasswordGrid.Visibility = Visibility.Collapsed;
-
             }
-           
-
 
         }
 
@@ -97,7 +102,33 @@ namespace Manager.Views
         private void OpenFile(object sender, RoutedEventArgs e)
         {
             var fileContent = Utils.Utils.OpenFile();
+
+            //if (fileContent != null) EnableEntriesMenu(true);
+
             LoadData(fileContent);
+            //  ColumnOrder();
+        }
+
+        /// <summary>
+        /// Enable
+        /// </summary>
+        /// <param name="status"></param>
+        private void EnableEntriesMenu(bool status)
+        {
+            if (status)
+            {
+                Entries.IsEnabled = true;
+            }
+            else
+            {
+                Entries.IsEnabled = false;
+            }
+        }      
+    
+        private void ClosePasswordMnager(object sender, RoutedEventArgs e)
+        {
+
+            RedirectWelcome?.Invoke();
         }
     }
 }
