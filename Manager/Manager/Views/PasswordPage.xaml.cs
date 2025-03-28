@@ -35,9 +35,16 @@ namespace Manager.Views
            // EnableEntriesMenu(false);
           
         }
+
+        private void ClosePasswordMnager(object sender, RoutedEventArgs e)
+        {
+
+            RedirectWelcome?.Invoke();
+        }
         private void LatestFileCleanUp()
         {
             PasswordGrid.Columns.Clear();
+            PasswordGrid.Visibility = Visibility.Collapsed;
         }
 
         private void ColumnGeneration()
@@ -75,14 +82,15 @@ namespace Manager.Views
 
             if (content != null)
             {
+                PasswordGrid.Visibility = Visibility.Visible;
                 PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
                 PasswordGrid.ItemsSource = content;
 
             }
             else
             {
-                //Need to update the status bar
-                //PasswordGrid.Visibility = Visibility.Collapsed;
+               
+                PasswordGrid.Visibility = Visibility.Collapsed;
             }
 
         }
@@ -96,16 +104,32 @@ namespace Manager.Views
         {
             NewEntryWindow newEntryWindow = new();
 
-            newEntryWindow.ShowDialog();
+            var result = newEntryWindow.ShowDialog();
+
+            if (result == false)
+            {
+                StatusText.Content = "New Entry canceled";
+            }
+            else
+            {
+                StatusText.Content = "Entry created correctly";
+                
+            }
+
         }
 
         private void OpenFile(object sender, RoutedEventArgs e)
         {
+            LatestFileCleanUp();
             var fileContent = Utils.Utils.OpenFile();
 
             //if (fileContent != null) EnableEntriesMenu(true);
 
-            LoadData(fileContent);
+            if (fileContent != null)
+            {
+                LoadData(fileContent);
+                StatusText.Content = fileContent.ToString();
+            }
             //  ColumnOrder();
         }
 
@@ -125,10 +149,18 @@ namespace Manager.Views
             }
         }      
     
-        private void ClosePasswordMnager(object sender, RoutedEventArgs e)
-        {
+       
 
-            RedirectWelcome?.Invoke();
+        private void CreateNewFile(object sender, RoutedEventArgs e)
+        {
+            var result = Utils.Utils.CreateNewFile();
+            if (result != null)
+            {
+                LoadData(result?.Item2);
+                StatusText.Content = result?.Item2;
+            }
         }
+
+     
     }
 }

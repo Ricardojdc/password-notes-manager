@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace Manager.Views.PasswordPageWindows
         public NewEntryWindow()
         {
             InitializeComponent();
+            SaveEntryBtn.IsEnabled = false;
         }
 
         public NewEntryWindow(List<Password> list) : this()
@@ -54,10 +56,36 @@ namespace Manager.Views.PasswordPageWindows
             VisiblePasswordBox.Visibility = Visibility.Collapsed;
         }
 
+        private void ValidateForm()
+        {
+            bool valid = !string.IsNullOrEmpty(SiteTextBox.Text) && !string.IsNullOrEmpty(LoginTextBox.Text) && !string.IsNullOrEmpty(PasswordBox.Password);
+
+            SaveEntryBtn.IsEnabled = valid;
+        }
+
+        private void TextBox_TextChanged(object sender,TextChangedEventArgs e)
+        {
+            ValidateForm();
+        }
+
+        private void PasseordBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            ValidateForm();
+        }
+
         private void CloseNewEntry(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
 
+        }
+
+        private void SaveNewEntry(object sender, RoutedEventArgs e)
+        {
+            //Password NewPassword = { }
+
+            this.DialogResult = true;
+           
         }
     }
 }
