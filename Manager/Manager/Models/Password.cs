@@ -13,7 +13,7 @@ namespace Manager.Models
     public class Password
     {
         //Class variables
-        private string _id;
+        private int _id;
         private string _login;
         private string _password;
         private string _site;
@@ -23,7 +23,7 @@ namespace Manager.Models
         //Getters and setters. Json property to identify private fields
         [JsonRequired]
         [JsonProperty("_id")]
-        public string Id
+        public int Id
         {
 
             get { return _id; }
@@ -60,88 +60,5 @@ namespace Manager.Models
             set { _notes = value; }
         }
 
-        public List<Password> ReadFromFile(string path)
-        {
-            List<Password> result = new List<Password>();   
-            
-            if(path == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                FileInfo file = new FileInfo(path);
-
-                if (file.Exists)
-                {
-
-                    using (StreamReader sr = file.OpenText())
-                    {
-
-                        string line;
-
-                        while((line = sr.ReadLine()) != null)
-                        {
-
-                            string[] recompose = line.Split(" ");
-                            if (recompose.Length == 5)
-                            {
-                                result.Add(new Password { Id = recompose[0], Login = recompose[1], Pass = recompose[2], Site = recompose[3], Notes = recompose[4] });
-                            }
-                            else
-                            {
-                                MessageBox.Show("Invalid format");
-                                return null;
-                            }
-
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error reading file");
-            }
-
-            return result;
-        }
-
-        public void TransformToFile()
-        {
-
-
-        }
-
-        public List<Password> ReadFromJSON(string path)
-        {   
-            string jsonString = File.ReadAllText(path);
-            try
-            {
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    
-                    MissingMemberHandling = MissingMemberHandling.Error
-                };
-              
-                List<Password> list = JsonConvert.DeserializeObject<List<Password>>(jsonString, settings);
-
-                if (list != null)
-                {
-                    return list;
-                }
-
-            }           
-            catch (Exception ex)
-            {
-
-                MessageBox.Show("Invalid Format");
-            }
-         
-            
-
-            return null;
-        }
     }
 }

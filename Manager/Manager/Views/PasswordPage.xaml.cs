@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -26,25 +27,27 @@ namespace Manager.Views
     public partial class PasswordPage : UserControl
     {
         public event Action RedirectWelcome;
-        List<Test> t;
-        Password p;
+        private ObservableCollection<Password> _passwordFile;
+       
         public PasswordPage()
         {
             InitializeComponent();
             LatestFileCleanUp();
-           // EnableEntriesMenu(false);
+            EnableEntriesMenu(false);
+            EnableFileMenuItems(false);
           
         }
 
-        private void ClosePasswordMnager(object sender, RoutedEventArgs e)
+        private void ClosePasswordManager(object sender, RoutedEventArgs e)
         {
-
-            RedirectWelcome?.Invoke();
+                RedirectWelcome?.Invoke();  
+            
         }
         private void LatestFileCleanUp()
         {
             PasswordGrid.Columns.Clear();
             PasswordGrid.Visibility = Visibility.Collapsed;
+            StatusText.Content = string.Empty;  
         }
 
         private void ColumnGeneration()
@@ -67,30 +70,22 @@ namespace Manager.Views
 
         }
 
-        private void ColumnOrder()
-        {
-
-            PasswordGrid.Columns[1].DisplayIndex = 2;
-        }
-
         private void LoadData(string fileContent)
         {
-
-            p = new Password();
             //var fileContent = p.ReadFromFile(Utils.Utils.OpenFile());
-            var content = p.ReadFromJSON(fileContent);
+            _passwordFile = new ObservableCollection<Password>(Utils.Utils.ReadFromJSON(fileContent));
 
-            if (content != null)
+            if (_passwordFile != null)
             {
                 PasswordGrid.Visibility = Visibility.Visible;
                 PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
-                PasswordGrid.ItemsSource = content;
-
+                PasswordGrid.ItemsSource = _passwordFile;
+              
             }
             else
-            {
-               
+            {            
                 PasswordGrid.Visibility = Visibility.Collapsed;
+
             }
 
         }
@@ -100,9 +95,9 @@ namespace Manager.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NewPasswordEntry(object sender, RoutedEventArgs e)
+        private async void NewPasswordEntry(object sender, RoutedEventArgs e)
         {
-            NewEntryWindow newEntryWindow = new();
+            NewEntryWindow newEntryWindow = new(_passwordFile);
 
             var result = newEntryWindow.ShowDialog();
 
@@ -111,9 +106,11 @@ namespace Manager.Views
                 StatusText.Content = "New Entry canceled";
             }
             else
-            {
+            {             
                 StatusText.Content = "Entry created correctly";
-                
+               // PasswordGrid.ItemsSource = null; //Necesary if using a simple List instead of an ObservableCollection
+                PasswordGrid.ItemsSource = _passwordFile;
+ 
             }
 
         }
@@ -123,14 +120,14 @@ namespace Manager.Views
             LatestFileCleanUp();
             var fileContent = Utils.Utils.OpenFile();
 
-            //if (fileContent != null) EnableEntriesMenu(true);
-
             if (fileContent != null)
             {
                 LoadData(fileContent);
+                EnableEntriesMenu(true);
+                EnableFileMenuItems(true);
                 StatusText.Content = fileContent.ToString();
             }
-            //  ColumnOrder();
+           
         }
 
         /// <summary>
@@ -145,11 +142,24 @@ namespace Manager.Views
             }
             else
             {
-                Entries.IsEnabled = false;
+               Entries.IsEnabled = false;
             }
-        }      
-    
-       
+        }
+
+        private void EnableFileMenuItems(bool status)
+        {
+            if (status)
+            {
+                Save.IsEnabled = true;
+                Close_File.IsEnabled = true;   
+            }
+            else
+            {
+                Save.IsEnabled = false;
+                Close_File.IsEnabled = false;
+
+            }
+        }
 
         private void CreateNewFile(object sender, RoutedEventArgs e)
         {
@@ -157,10 +167,17 @@ namespace Manager.Views
             if (result != null)
             {
                 LoadData(result?.Item2);
-                StatusText.Content = result?.Item2;
+                StatusText.Content ="File created at: " + result?.Item2;
+                EnableEntriesMenu(true);
+                EnableFileMenuItems(true);
             }
         }
 
-     
+        private void CloseFile(object sender, RoutedEventArgs e)
+        {
+            LatestFileCleanUp();
+            EnableEntriesMenu(false);
+            EnableFileMenuItems(false);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Manager.Views.PasswordPageWindows
     /// </summary>
     public partial class NewEntryWindow : Window
     {
-        private List<Password> _list;
+        private ObservableCollection<Password> _list;
         private string _id = null;
         public NewEntryWindow()
         {
@@ -30,13 +31,14 @@ namespace Manager.Views.PasswordPageWindows
             SaveEntryBtn.IsEnabled = false;
         }
 
-        public NewEntryWindow(List<Password> list) : this()
+        public NewEntryWindow(ObservableCollection<Password> list) : this()
         {
            
             this._list = list;
+           
         }
 
-        public NewEntryWindow(List<Password> list, string id): this(list)
+        public NewEntryWindow(ObservableCollection<Password> list, string id): this(list)
         {
             
             this._id = id;
@@ -82,8 +84,17 @@ namespace Manager.Views.PasswordPageWindows
 
         private void SaveNewEntry(object sender, RoutedEventArgs e)
         {
-            //Password NewPassword = { }
+            int id = _list.Max( p => p.Id) +1;
 
+            Password NewPassword = new Password
+            {
+                Id = id,
+                Login = LoginTextBox.Text,          
+                Pass = VisiblePasswordBox.Text, 
+                Site = SiteTextBox.Text,
+                Notes = NotesTextBox.Text
+            };
+            this._list.Add(NewPassword);
             this.DialogResult = true;
            
         }

@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Manager.Models;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace Manager.Utils
 {
@@ -88,6 +90,84 @@ namespace Manager.Utils
 
             return null;
         }
-  
+
+        public static List<Password> ReadFromFile(string path)
+        {
+            List<Password> result = new List<Password>();
+
+            if (path == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                FileInfo file = new FileInfo(path);
+
+                if (file.Exists)
+                {
+
+                    using (StreamReader sr = file.OpenText())
+                    {
+
+                        string line;
+
+                        while ((line = sr.ReadLine()) != null)
+                        {
+
+                            string[] recompose = line.Split(" ");
+                            if (recompose.Length == 5)
+                            {
+                                result.Add(new Password { Id = int.Parse(recompose[0]), Login = recompose[1], Pass = recompose[2], Site = recompose[3], Notes = recompose[4] });
+                            }
+                            else
+                            {
+                                MessageBox.Show("Invalid format");
+                                return null;
+                            }
+
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error reading file");
+            }
+
+            return result;
+        }
+
+
+        public static List<Password> ReadFromJSON(string path)
+        {
+            string jsonString = File.ReadAllText(path);
+            try
+            {
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                };
+
+                List<Password> list = JsonConvert.DeserializeObject<List<Password>>(jsonString, settings);
+
+                if (list != null)
+                {
+                    return list;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Invalid Format");
+            }
+
+
+
+            return null;
+        }
+
     }
 }
