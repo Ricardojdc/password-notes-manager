@@ -37,6 +37,7 @@ namespace Manager.Views
             LatestFileCleanUp();
             EnableEntriesMenu(false);
             EnableFileMenuItems(false);
+            EnableActiosnGrid(false);
           
         }
 
@@ -72,17 +73,16 @@ namespace Manager.Views
                 PasswordGrid.Columns.Add(newColumn);
             }
 
-            DataGridTextColumn actions = new DataGridTextColumn();
-
-            actions.Header = "Action";
-
-            PasswordGrid.Columns.Add(actions);
 
         }
 
-        private void LoadData(string fileContent)
+        /// <summary>
+        /// Loads the data from a JSON file viapath
+        /// </summary>
+        /// <param name="path">Path of the file</param>
+        private void LoadData(string path)
         {
-            var passwords = Utils.Utils.ReadFromJSON(fileContent);
+            var passwords = Utils.Utils.ReadFromJSON(path);
 
             if (passwords != null)
             {
@@ -90,7 +90,9 @@ namespace Manager.Views
                 PasswordGrid.Visibility = Visibility.Visible;
                 //PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
                 ColumnGeneration();
-                PasswordGrid.AutoGenerateColumns = false;
+                PasswordGrid.AutoGenerateColumns = false; // Disable autogeneration of columns from the list
+                PasswordGrid.SelectionMode = DataGridSelectionMode.Single; // Only one row selected at a time
+                PasswordGrid.SelectionUnit = DataGridSelectionUnit.FullRow;
                 PasswordGrid.ItemsSource = _passwordFile;
                
             }
@@ -142,7 +144,7 @@ namespace Manager.Views
         }
 
         /// <summary>
-        /// Enable
+        /// Enable or disable the entries menu
         /// </summary>
         /// <param name="status"></param>
         private void EnableEntriesMenu(bool status)
@@ -172,6 +174,18 @@ namespace Manager.Views
             }
         }
 
+        private void EnableActiosnGrid(bool status)
+        {
+            if (status)
+            {
+                ActionsGrid.Visibility = Visibility.Visible;   
+            }
+            else
+            {
+                ActionsGrid.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void CreateNewFile(object sender, RoutedEventArgs e)
         {
             var result = Utils.Utils.CreateNewFile();
@@ -190,6 +204,23 @@ namespace Manager.Views
             LatestFileCleanUp();
             EnableEntriesMenu(false);
             EnableFileMenuItems(false);
+        }
+
+        /// <summary>
+        /// When a row is selected in the password grid, another grid becomes visible and
+        /// displays a series of buttons and information
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PasswordGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PasswordGrid.SelectedItem is Password selectedPassword)
+            {            
+                EnableActiosnGrid(true);
+                ActionGridLabel.Content = selectedPassword.Site;
+                
+            }
+            
         }
     }
 }

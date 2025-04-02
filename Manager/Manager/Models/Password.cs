@@ -60,5 +60,10 @@ namespace Manager.Models
             set { _notes = value; }
         }
 
+        public override string ToString()
+        {
+            return $"{Id} {Site}";
+        }
+
     }
 }
