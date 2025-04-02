@@ -152,20 +152,16 @@ namespace Manager.Utils
 
                 List<Password> list = JsonConvert.DeserializeObject<List<Password>>(jsonString, settings);
 
-                if (list != null)
-                {
-                    return list;
-                }
+                return list;
 
             }
             catch (Exception ex)
             {
 
-                MessageBox.Show("Invalid Format");
+                MessageBox.Show("Invalid Format","Error");
+                
             }
-
-
-
+ 
             return null;
         }
 

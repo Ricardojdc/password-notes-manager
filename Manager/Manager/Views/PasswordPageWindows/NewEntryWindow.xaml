@@ -19,13 +19,13 @@
         <TextBox x:Name="VisiblePasswordBox" HorizontalAlignment="Left" Margin="80,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Visibility="Collapsed" SelectionBrush="White" TextChanged="TextBox_TextChanged" Tag="NewEntryValidator"/>
         <Label x:Name="Notes" Content="Notes" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="41"/>
         <TextBox x:Name="NotesTextBox" HorizontalAlignment="Left" Margin="80,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" Height="93" BorderBrush="White" Tag=""/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="80,76,0,0" VerticalAlignment="Top" Width="166" BorderBrush="White" Height="18" PasswordChanged="PasseordBox_TextChanged"/>
-        <StatusBar x:Name="NewEntryStatusBar" Grid.Row="1" VerticalAlignment="Top" Background="#FF7F7F7F">
-            <StatusBarItem x:Name="NewEntryAlert" Height="22" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        </StatusBar>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="80,76,0,0" VerticalAlignment="Top" Width="166" BorderBrush="White" Height="18" PasswordChanged="PasswordBox_TextChanged"/>
         <Button x:Name="SaveEntryBtn" Content="Save" HorizontalAlignment="Left" Margin="193,233,0,0" VerticalAlignment="Top" Width="50" Click="SaveNewEntry"/>
         <Button x:Name="CancelEntryBtn" Content="Cancel" HorizontalAlignment="Left" Margin="262,233,0,0" VerticalAlignment="Top" Width="50" Click="CloseNewEntry"/>
         <CheckBox Content="CheckBox"  Checked="ShowPassword_Checked" Unchecked="ShowPassword_Unchecked" HorizontalAlignment="Left" Margin="253,76,0,0" VerticalAlignment="Top" Width="17"/>
         <Label x:Name="ShowPasswordCheckBox"  Content="Show Password" HorizontalAlignment="Left" Margin="275,70,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <StatusBar x:Name="NewEntryStatusBar" Grid.Row="1" VerticalAlignment="Top" Background="#FF7F7F7F">
+            <StatusBarItem x:Name="NewEntryAlert" Height="22" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        </StatusBar>
     </Grid>
 </Window>

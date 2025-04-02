@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace Manager.Views
     {
         public event Action RedirectWelcome;
         private ObservableCollection<Password> _passwordFile;
+        private string _path;
        
         public PasswordPage()
         {
@@ -52,42 +54,50 @@ namespace Manager.Views
 
         private void ColumnGeneration()
         {
-            PasswordGrid.AutoGenerateColumns = false;
-            var name = new DataGridTextColumn();
-            name.Header = "Name";
-            name.Binding = new Binding("Name");
-            name.IsReadOnly = true;
+        
+            Type passType = typeof(Password);
+            PropertyInfo[] properties = passType.GetProperties();
 
-            PasswordGrid.Columns.Add(name);
+            PasswordGrid.Columns.Clear();
 
-            var age = new DataGridTextColumn();
-            age.Header = "Age";
-            age.Binding = new Binding("Age");
-            age.IsReadOnly = false;
+            foreach (PropertyInfo property in properties)
+            {
+ 
+                DataGridTextColumn newColumn = new DataGridTextColumn();
 
-            PasswordGrid.Columns.Add(age);
+                newColumn.Header = property.Name;
 
+                newColumn.Binding = new Binding(property.Name);
+
+                PasswordGrid.Columns.Add(newColumn);
+            }
+
+            DataGridTextColumn actions = new DataGridTextColumn();
+
+            actions.Header = "Action";
+
+            PasswordGrid.Columns.Add(actions);
 
         }
 
         private void LoadData(string fileContent)
         {
-            //var fileContent = p.ReadFromFile(Utils.Utils.OpenFile());
-            _passwordFile = new ObservableCollection<Password>(Utils.Utils.ReadFromJSON(fileContent));
+            var passwords = Utils.Utils.ReadFromJSON(fileContent);
 
-            if (_passwordFile != null)
+            if (passwords != null)
             {
+                _passwordFile = new ObservableCollection<Password>(passwords);
                 PasswordGrid.Visibility = Visibility.Visible;
-                PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
+                //PasswordGrid.PreviewMouseDown += (s, e) => e.Handled = true; // Makes the rows unclickable
+                ColumnGeneration();
+                PasswordGrid.AutoGenerateColumns = false;
                 PasswordGrid.ItemsSource = _passwordFile;
-              
+               
             }
             else
-            {            
+            {
                 PasswordGrid.Visibility = Visibility.Collapsed;
-
             }
-
         }
 
         /// <summary>
@@ -97,7 +107,7 @@ namespace Manager.Views
         /// <param name="e"></param>
         private async void NewPasswordEntry(object sender, RoutedEventArgs e)
         {
-            NewEntryWindow newEntryWindow = new(_passwordFile);
+            NewEntryWindow newEntryWindow = new(_passwordFile,_path);
 
             var result = newEntryWindow.ShowDialog();
 
@@ -119,10 +129,11 @@ namespace Manager.Views
         {
             LatestFileCleanUp();
             var fileContent = Utils.Utils.OpenFile();
-
+           
             if (fileContent != null)
             {
                 LoadData(fileContent);
+                _path = fileContent;
                 EnableEntriesMenu(true);
                 EnableFileMenuItems(true);
                 StatusText.Content = fileContent.ToString();
@@ -167,6 +178,7 @@ namespace Manager.Views
             if (result != null)
             {
                 LoadData(result?.Item2);
+                _path = result?.Item2;
                 StatusText.Content ="File created at: " + result?.Item2;
                 EnableEntriesMenu(true);
                 EnableFileMenuItems(true);

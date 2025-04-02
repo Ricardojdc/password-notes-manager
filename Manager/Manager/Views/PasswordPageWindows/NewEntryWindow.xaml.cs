@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Manager.Models;
+using Newtonsoft.Json;
 
 namespace Manager.Views.PasswordPageWindows
 {
@@ -25,20 +27,22 @@ namespace Manager.Views.PasswordPageWindows
     {
         private ObservableCollection<Password> _list;
         private string _id = null;
+        private string _path;
         public NewEntryWindow()
         {
             InitializeComponent();
             SaveEntryBtn.IsEnabled = false;
         }
 
-        public NewEntryWindow(ObservableCollection<Password> list) : this()
+        public NewEntryWindow(ObservableCollection<Password> list,string path) : this()
         {
            
             this._list = list;
+            this._path = path;
            
         }
 
-        public NewEntryWindow(ObservableCollection<Password> list, string id): this(list)
+        public NewEntryWindow(ObservableCollection<Password> list,string path, string id): this(list,path)
         {
             
             this._id = id;
@@ -68,11 +72,13 @@ namespace Manager.Views.PasswordPageWindows
         private void TextBox_TextChanged(object sender,TextChangedEventArgs e)
         {
             ValidateForm();
+            PasswordBox.Password = VisiblePasswordBox.Text;
         }
 
-        private void PasseordBox_TextChanged(object sender, RoutedEventArgs e)
+        private void PasswordBox_TextChanged(object sender, RoutedEventArgs e)
         {
             ValidateForm();
+            VisiblePasswordBox.Text = PasswordBox.Password;
         }
 
         private void CloseNewEntry(object sender, RoutedEventArgs e)
@@ -84,19 +90,46 @@ namespace Manager.Views.PasswordPageWindows
 
         private void SaveNewEntry(object sender, RoutedEventArgs e)
         {
-            int id = _list.Max( p => p.Id) +1;
 
-            Password NewPassword = new Password
+            try
             {
-                Id = id,
-                Login = LoginTextBox.Text,          
-                Pass = VisiblePasswordBox.Text, 
-                Site = SiteTextBox.Text,
-                Notes = NotesTextBox.Text
-            };
-            this._list.Add(NewPassword);
-            this.DialogResult = true;
-           
+
+                int id = _list.Max(p => p.Id) + 1;
+
+                Password NewPassword = new Password
+                {
+                    Id = id,
+                    Login = LoginTextBox.Text,
+                    Pass = PasswordBox.Password,
+                    Site = SiteTextBox.Text,
+                    Notes = NotesTextBox.Text
+                };
+
+                this._list.Add(NewPassword);
+
+                if (File.Exists(_path))
+                {                    
+
+                    string json = JsonConvert.SerializeObject(_list,Formatting.Indented);
+
+                    File.WriteAllText(this._path, json);
+
+                    this.DialogResult = true;
+                }
+                else
+                {
+                    MessageBox.Show($"Error opening file at: {_path}");
+                    this.DialogResult= false;
+                }
+
+                    
+            }
+            catch (Exception)
+            {
+
+            }
         }
+
+     
     }
 }
