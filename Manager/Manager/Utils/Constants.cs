@@ -16,7 +16,8 @@ namespace Manager.Utils
 
         public const string GENERIC_ERROR = "An error ocurred";
         public const string ACCESS_DENIED = "Access denied";
-        public const string FILE_CREATION_ERROR = "Error creating the file"; 
+        public const string FILE_CREATION_ERROR = "Error creating the file";
+        public const string CONFIDENTIAL_DATA = "Can't display confidential data";
 
     }
 }

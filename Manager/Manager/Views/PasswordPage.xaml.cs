@@ -35,10 +35,21 @@ namespace Manager.Views
         {
             InitializeComponent();
             LatestFileCleanUp();
-            EnableEntriesMenu(false);
+            EnableEntriesMenuItems(false);
             EnableFileMenuItems(false);
             EnableActiosnGrid(false);
+            EnableSearchBar(false);
+            //TimeOut();
           
+        }
+
+        private async void TimeOut()
+        {        
+            await Task.Delay(360000);
+ 
+            RedirectWelcome?.Invoke();
+            MessageBox.Show("Timed out", "Time out");
+
         }
 
         private void ClosePasswordManager(object sender, RoutedEventArgs e)
@@ -53,6 +64,9 @@ namespace Manager.Views
             StatusText.Content = string.Empty;  
         }
 
+        /// <summary>
+        /// Generates the column header based on the object Password
+        /// </summary>
         private void ColumnGeneration()
         {
         
@@ -68,9 +82,13 @@ namespace Manager.Views
 
                 newColumn.Header = property.Name;
 
-                newColumn.Binding = new Binding(property.Name);
+                if (property.Name != "Pass")
+                {
+                    newColumn.Binding = new Binding(property.Name);
+                    PasswordGrid.Columns.Add(newColumn);
+                }
 
-                PasswordGrid.Columns.Add(newColumn);
+               
             }
 
 
@@ -129,15 +147,16 @@ namespace Manager.Views
 
         private void OpenFile(object sender, RoutedEventArgs e)
         {
-            LatestFileCleanUp();
+            
             var fileContent = Utils.Utils.OpenFile();
            
             if (fileContent != null)
             {
                 LoadData(fileContent);
                 _path = fileContent;
-                EnableEntriesMenu(true);
+                EnableEntriesMenuItems(true);
                 EnableFileMenuItems(true);
+                EnableSearchBar(true);
                 StatusText.Content = fileContent.ToString();
             }
            
@@ -147,15 +166,15 @@ namespace Manager.Views
         /// Enable or disable the entries menu
         /// </summary>
         /// <param name="status"></param>
-        private void EnableEntriesMenu(bool status)
+        private void EnableEntriesMenuItems(bool status)
         {
             if (status)
             {
-                Entries.IsEnabled = true;
+                New_Entry.IsEnabled = true;
             }
             else
             {
-               Entries.IsEnabled = false;
+               New_Entry.IsEnabled = false;
             }
         }
 
@@ -186,6 +205,20 @@ namespace Manager.Views
             }
         }
 
+        private void EnableSearchBar(bool status) 
+        {
+            if (status)
+            {
+                SearchLbl1.Visibility = Visibility.Visible;
+                SearchTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchLbl1.Visibility = Visibility.Hidden;
+                SearchTextBox.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void CreateNewFile(object sender, RoutedEventArgs e)
         {
             var result = Utils.Utils.CreateNewFile();
@@ -194,7 +227,7 @@ namespace Manager.Views
                 LoadData(result?.Item2);
                 _path = result?.Item2;
                 StatusText.Content ="File created at: " + result?.Item2;
-                EnableEntriesMenu(true);
+                EnableEntriesMenuItems(true);
                 EnableFileMenuItems(true);
             }
         }
@@ -202,8 +235,10 @@ namespace Manager.Views
         private void CloseFile(object sender, RoutedEventArgs e)
         {
             LatestFileCleanUp();
-            EnableEntriesMenu(false);
+            EnableEntriesMenuItems(false);
             EnableFileMenuItems(false);
+            EnableActiosnGrid(false);
+            EnableSearchBar(false);
         }
 
         /// <summary>
@@ -217,6 +252,7 @@ namespace Manager.Views
             if (PasswordGrid.SelectedItem is Password selectedPassword)
             {            
                 EnableActiosnGrid(true);
+                
                 ActionGridLabel.Content = selectedPassword.Site;
                 
             }

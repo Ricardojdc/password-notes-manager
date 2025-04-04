@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Manager.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -39,9 +40,10 @@ namespace Manager.Models
         }
         [JsonRequired]
         [JsonProperty("_password")]
+        [Confidential]
         public string Pass
         {
-
+            
             get { return _password; }
             set { _password = value; }
         }

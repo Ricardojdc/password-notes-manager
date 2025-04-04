@@ -5,27 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Manager.Views.PasswordPageWindows"
         mc:Ignorable="d"
-        Title="New Entry" Height="320" Width="500" MinHeight="300" MinWidth="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid x:Name="NewEntryGrid" Background="Black" MinWidth="500" MaxWidth="500"  MaxHeight="300" MinHeight="300">
+        Title="New Entry" Height="400" Width="600" MinHeight="300" MinWidth="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid x:Name="NewEntryGrid" Background="Black" MinWidth="600" MaxWidth="600"  MaxHeight="400" MinHeight="400" Width="600" Margin="0,1,0,1" Height="400">
         <Grid.RowDefinitions>
             <RowDefinition Height="263*"/>
             <RowDefinition Height="37*"/>
         </Grid.RowDefinitions>
-        <Label x:Name="Site" Content="Site" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="30"/>
-        <TextBox x:Name="SiteTextBox" HorizontalAlignment="Left" Margin="80,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Height="19" BorderBrush="White" Tag="NewEntryValidator" TextChanged="TextBox_TextChanged"/>
-        <Label x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="39"/>
-        <TextBox x:Name="LoginTextBox" HorizontalAlignment="Left" Margin="80,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" BorderBrush="White" Height="18" Tag="NewEntryValidator" TextChanged="TextBox_TextChanged"/>
-        <Label x:Name="Password" Content="Password" Margin="10,72,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Height="26" Width="60"/>
-        <TextBox x:Name="VisiblePasswordBox" HorizontalAlignment="Left" Margin="80,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Visibility="Collapsed" SelectionBrush="White" TextChanged="TextBox_TextChanged" Tag="NewEntryValidator"/>
-        <Label x:Name="Notes" Content="Notes" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="41"/>
-        <TextBox x:Name="NotesTextBox" HorizontalAlignment="Left" Margin="80,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" Height="93" BorderBrush="White" Tag=""/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="80,76,0,0" VerticalAlignment="Top" Width="166" BorderBrush="White" Height="18" PasswordChanged="PasswordBox_TextChanged"/>
-        <Button x:Name="SaveEntryBtn" Content="Save" HorizontalAlignment="Left" Margin="193,233,0,0" VerticalAlignment="Top" Width="50" Click="SaveNewEntry"/>
-        <Button x:Name="CancelEntryBtn" Content="Cancel" HorizontalAlignment="Left" Margin="262,233,0,0" VerticalAlignment="Top" Width="50" Click="CloseNewEntry"/>
-        <CheckBox Content="CheckBox"  Checked="ShowPassword_Checked" Unchecked="ShowPassword_Unchecked" HorizontalAlignment="Left" Margin="253,76,0,0" VerticalAlignment="Top" Width="17"/>
-        <Label x:Name="ShowPasswordCheckBox"  Content="Show Password" HorizontalAlignment="Left" Margin="275,70,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label x:Name="Site" Content="Site" HorizontalAlignment="Left" Margin="10,13,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="30"/>
+        <TextBox x:Name="SiteTextBox" HorizontalAlignment="Left" Margin="80,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Height="34" BorderBrush="White" Tag="NewEntryValidator" TextChanged="TextBox_TextChanged" SelectionBrush="#FF53B12A"/>
+        <Label x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="39"/>
+        <TextBox x:Name="LoginTextBox" HorizontalAlignment="Left" Margin="80,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="182" BorderBrush="White" Height="34" Tag="NewEntryValidator" TextChanged="TextBox_TextChanged" SelectionBrush="#FF53B12A"/>
+        <Label x:Name="Password" Content="Password" Margin="10,92,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Height="26" Width="60"/>
+        <TextBox x:Name="VisiblePasswordBox" HorizontalAlignment="Left" Margin="80,92,0,0" VerticalAlignment="Top" Width="190" Visibility="Collapsed" SelectionBrush="White" TextChanged="TextBox_TextChanged" Tag="NewEntryValidator" BorderBrush="White" Height="34"/>
+        <Label x:Name="Notes" Content="Notes" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" Foreground="White" Height="26" Width="41" RenderTransformOrigin="0.537,2.298"/>
+        <TextBox x:Name="NotesTextBox" HorizontalAlignment="Left" Margin="80,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" Height="93" BorderBrush="White" Tag="" SelectionBrush="#FF53B12A"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="80,92,0,0" VerticalAlignment="Top" Width="182" BorderBrush="White" Height="34" PasswordChanged="PasswordBox_TextChanged" SelectionBrush="#FF53B12A"/>
+        <Button x:Name="SaveEntryBtn" Content="Save" Margin="200,288,0,0" VerticalAlignment="Top" Width="62" Click="SaveNewEntry" Foreground="White" Background="#FF4C6F3A" BorderBrush="#FFFBFBFB" ToolTip="" OverridesDefaultStyle="False"/>
+        <Button x:Name="CancelEntryBtn" Content="Cancel" Margin="309,288,0,0" VerticalAlignment="Top" Width="66" Click="CloseNewEntry" Foreground="White" BorderBrush="White" Background="#FF7B2525"/>
+        <CheckBox Content=""  Checked="ShowPassword_Checked" Unchecked="ShowPassword_Unchecked" Margin="262,92,0,0" VerticalAlignment="Top" Width="26" Background="Black" Height="29"/>
+        <Label x:Name="ShowPasswordCheckBox"  Content="Show Password" HorizontalAlignment="Left" Margin="301,98,0,0" VerticalAlignment="Top" Foreground="White"/>
         <StatusBar x:Name="NewEntryStatusBar" Grid.Row="1" VerticalAlignment="Top" Background="#FF7F7F7F">
             <StatusBarItem x:Name="NewEntryAlert" Height="22" VerticalAlignment="Top" HorizontalAlignment="Center"/>
         </StatusBar>
+        <Label x:Name="ClipboardLbl" Content="" HorizontalAlignment="Left" Margin="398,96,0,0" VerticalAlignment="Top" Width="23" MouseDown="CopyToClipboard" RenderTransformOrigin="326445484.105,6778011.359">
+            <Label.Background>
+                <ImageBrush ImageSource="/Views/PasswordPageWindows/clipboard-icon.png"/>
+            </Label.Background>
+        </Label>
     </Grid>
 </Window>

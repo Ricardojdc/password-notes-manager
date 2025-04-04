@@ -32,6 +32,7 @@ namespace Manager.Views.PasswordPageWindows
         {
             InitializeComponent();
             SaveEntryBtn.IsEnabled = false;
+           
         }
 
         public NewEntryWindow(ObservableCollection<Password> list,string path) : this()
@@ -131,5 +132,9 @@ namespace Manager.Views.PasswordPageWindows
         }
 
      
+        private void CopyToClipboard(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(PasswordBox.Password);
+        }
     }
 }

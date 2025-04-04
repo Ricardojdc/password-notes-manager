@@ -10,11 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\PasswordPageWindows\clipboard-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\arrow-toggle-left-and-right-1-128.png" />
+    <Resource Include="Views\PasswordPageWindows\clipboard-icon.png" />
   </ItemGroup>
 
 </Project>
