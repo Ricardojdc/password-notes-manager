@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Manager" Height="600" Width="1400" MinHeight="600" MinWidth="1000" 
          Background="#FF585858" WindowStartupLocation="CenterScreen">
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="Black">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="6"/>
@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <Grid x:Name="MainMenu" Background="Black"/>
 
-        <Grid x:Name="ContentArea" Grid.Column="1" Background="#FF7B7B7B"/>
+        <Grid x:Name="ContentArea" Grid.Column="1" Background="#FF4E6DCC"/>
 
     </Grid>
 

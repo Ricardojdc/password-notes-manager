@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -16,9 +18,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Manager.Attributes;
 using Manager.Models;
 using Manager.Utils;
 using Manager.Views.PasswordPageWindows;
+using Newtonsoft.Json;
 
 namespace Manager.Views
 {
@@ -30,6 +34,7 @@ namespace Manager.Views
         public event Action RedirectWelcome;
         private ObservableCollection<Password> _passwordFile;
         private string _path;
+        private Password _password;
        
         public PasswordPage()
         {
@@ -65,7 +70,7 @@ namespace Manager.Views
         }
 
         /// <summary>
-        /// Generates the column header based on the object Password
+        /// Generates the column header based on the object Password, excluding confidential properties
         /// </summary>
         private void ColumnGeneration()
         {
@@ -81,17 +86,15 @@ namespace Manager.Views
                 DataGridTextColumn newColumn = new DataGridTextColumn();
 
                 newColumn.Header = property.Name;
-
-                if (property.Name != "Pass")
+                
+                if (property.GetCustomAttribute(typeof(Confidential)) == null)
                 {
+                    property.GetCustomAttributes();
                     newColumn.Binding = new Binding(property.Name);
                     PasswordGrid.Columns.Add(newColumn);
+                   
                 }
-
-               
             }
-
-
         }
 
         /// <summary>
@@ -252,11 +255,39 @@ namespace Manager.Views
             if (PasswordGrid.SelectedItem is Password selectedPassword)
             {            
                 EnableActiosnGrid(true);
+                _password = selectedPassword;
                 
                 ActionGridLabel.Content = selectedPassword.Site;
                 
             }
             
+        }
+
+        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _passwordFile.Remove(_password);
+
+            if (File.Exists(_path))
+            {
+                string json = JsonConvert.SerializeObject(_passwordFile, Formatting.Indented);
+
+                File.WriteAllText(this._path, json);
+
+              
+            }
+            else
+            {
+                MessageBox.Show($"Error opening file at: {_path}");
+               
+            }
+            PasswordGrid.ItemsSource = _passwordFile;
+
+          
+        }
+
+        private void EditBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
