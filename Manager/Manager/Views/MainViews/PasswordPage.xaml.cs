@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Manager.Attributes;
 using Manager.Models;
-using Manager.Utils;
 using Manager.Views.PasswordPageWindows;
 using Newtonsoft.Json;
 
@@ -35,6 +21,7 @@ namespace Manager.Views
         private ObservableCollection<Password> _passwordFile;
         private string _path;
         private Password _password;
+        
        
         public PasswordPage()
         {
@@ -136,33 +123,16 @@ namespace Manager.Views
 
             if (result == false)
             {
-                StatusText.Content = "New Entry canceled";
+                SecondaryStatusBarItem.Content = "New Entry canceled";
             }
             else
             {             
-                StatusText.Content = "Entry created correctly";
+                SecondaryStatusBarItem.Content = "Entry created correctly";
                // PasswordGrid.ItemsSource = null; //Necesary if using a simple List instead of an ObservableCollection
                 PasswordGrid.ItemsSource = _passwordFile;
- 
+
             }
 
-        }
-
-        private void OpenFile(object sender, RoutedEventArgs e)
-        {
-            
-            var fileContent = Utils.Utils.OpenFile();
-           
-            if (fileContent != null)
-            {
-                LoadData(fileContent);
-                _path = fileContent;
-                EnableEntriesMenuItems(true);
-                EnableFileMenuItems(true);
-                EnableSearchBar(true);
-                StatusText.Content = fileContent.ToString();
-            }
-           
         }
 
         /// <summary>
@@ -185,12 +155,15 @@ namespace Manager.Views
         {
             if (status)
             {
+              
                 Save.IsEnabled = true;
+                SaveAsMenuItem.IsEnabled = true;
                 Close_File.IsEnabled = true;   
             }
             else
             {
                 Save.IsEnabled = false;
+                SaveAsMenuItem.IsEnabled = false;
                 Close_File.IsEnabled = false;
 
             }
@@ -233,6 +206,28 @@ namespace Manager.Views
                 EnableEntriesMenuItems(true);
                 EnableFileMenuItems(true);
             }
+        }
+
+        private void OpenFile(object sender, RoutedEventArgs e)
+        {
+
+            var fileContent = Utils.Utils.OpenFile();
+
+            if (fileContent != null)
+            {
+                LoadData(fileContent);
+                _path = fileContent;
+                EnableEntriesMenuItems(true);
+                EnableFileMenuItems(true);
+                EnableSearchBar(true);
+                StatusText.Content = fileContent.ToString();
+            }
+
+        }
+
+        private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void CloseFile(object sender, RoutedEventArgs e)
@@ -280,14 +275,28 @@ namespace Manager.Views
                 MessageBox.Show($"Error opening file at: {_path}");
                
             }
-            PasswordGrid.ItemsSource = _passwordFile;
-
-          
+            PasswordGrid.ItemsSource = _passwordFile;         
         }
 
         private void EditBtn_Click(object sender, RoutedEventArgs e)
         {
+            NewEntryWindow edit = new NewEntryWindow(_passwordFile,_path,_password);
 
+            var result = edit.ShowDialog();
+
+            if (result == false)
+            {
+                SecondaryStatusBarItem.Content = "Edit canceled";
+            }
+            else
+            {
+                SecondaryStatusBarItem.Content = "Edited correctly";
+                // PasswordGrid.ItemsSource = null; //Necesary if using a simple List instead of an ObservableCollection
+                PasswordGrid.ItemsSource = _passwordFile;
+
+            }
         }
+
+     
     }
 }

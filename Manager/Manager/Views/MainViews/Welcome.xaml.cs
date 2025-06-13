@@ -26,7 +26,5 @@ namespace Manager.Views
             InitializeComponent();
         }
 
-        
-    
     }
 }
